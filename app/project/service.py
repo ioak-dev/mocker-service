@@ -4,7 +4,7 @@ import app.sequence.service as sequence_service
 import app.role.service as role_service
 from bson.objectid import ObjectId
 
-domain = 'Project'
+domain = 'project'
 
 def find(request, space_id):
     member_projects = find_member_projects(space_id, request.user_id)
