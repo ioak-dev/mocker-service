@@ -7,17 +7,19 @@ from bson.objectid import ObjectId
 domain = 'project'
 
 def find(request, space_id):
-    member_projects = find_member_projects(space_id, request.user_id)
-    admin_projects = find_admin_projects(space_id, request.user_id)
+    # member_projects = find_member_projects(space_id, request.user_id)
+    # admin_projects = find_admin_projects(space_id, request.user_id)
+    all_projects = find_all_projects(space_id)
     projectid_list = []
-    for item in member_projects:
-        if item['projectId'] not in projectid_list:
-            projectid_list.append(ObjectId(item['projectId']))
-    for item in admin_projects:
-        if item['domainId'] not in projectid_list:
-            projectid_list.append(ObjectId(item['domainId']))
+    # for item in member_projects:
+    #     if item['projectId'] not in projectid_list:
+    #         projectid_list.append(ObjectId(item['projectId']))
+    # for item in admin_projects:
+    #     if item['domainId'] not in projectid_list:
+    #         projectid_list.append(ObjectId(item['domainId']))
 
-    projects = db_utils.find(space_id, domain, {'_id': {'$in': projectid_list}})
+    # projects = db_utils.find(space_id, domain, {'_id': {'$in': projectid_list}})
+    projects = db_utils.find(space_id, domain, {})
     
     return (200, {'data': projects})
 
