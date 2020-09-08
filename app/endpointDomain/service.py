@@ -1,7 +1,7 @@
 import library.db_utils as db_utils
 import app.project.service as project_service
 
-domain = 'domain'
+domain = 'endpoint.domain'
 
 
 def find(request, space_id):
@@ -12,10 +12,9 @@ def find(request, space_id):
 
 
 def update(request, space_id, data):
-
     if '_id' not in data:
         if 'projectId' not in data:
-            return 406, {'data': 'Please provide Project ID'}  #send error message
+            return 406, {'data': 'Please provide Project ID'}  # send error message
         else:
             result_project = project_service.find_by_id(request, space_id, data['projectId'])
             if result_project is None:
@@ -34,6 +33,11 @@ def delete(request, space_id, id):
 
 def find_by_id(request, space_id, id):
     data = db_utils.find(space_id, domain, {'_id': id})
+    return 200, {'data': data}
+
+
+def find_by_project_id(request, space_id, project_id):
+    data = db_utils.find(space_id, domain, {'project_id': project_id})
     return 200, {'data': data}
 
 
