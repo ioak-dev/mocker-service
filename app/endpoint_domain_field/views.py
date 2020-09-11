@@ -1,12 +1,10 @@
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from rest_framework.decorators import api_view
-from django.core import serializers
 import app.endpoint_domain_field.service as service
-import library.db_utils as db_utils
 
 
 @api_view(['GET'])
-def get_fields_domainId(request, space_id, domainId):
+def get_fields_domain_id(request, space_id, domain_id):
     if request.method == 'GET':
-        response = service.find_fields_domainId(request, space_id, domainId)
+        response = service.find_fields_domain_id(request, space_id, domain_id)
         return JsonResponse(response[1], status=response[0])

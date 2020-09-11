@@ -1,4 +1,4 @@
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from rest_framework.decorators import api_view
 
 from app.endpoint_domain import service
