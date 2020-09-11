@@ -5,14 +5,14 @@ from app.endpointDomain import service
 
 
 @api_view(['GET'])
-def get_endpoint_domain(request, space_id, project_id):
+def get_endpoint_domain(request, space_id, projectId):
     if request.method == 'GET':
-        response = service.find_by_project_id(request, space_id, project_id)
+        response = service.find_by_project_id(request, space_id, projectId)
         return JsonResponse(response[1], status=response[0])
 
 
 @api_view(['PUT'])
-def get_update_endpoint_domain(request, space_id):
+def update_endpoint_domain(request, space_id):
     if request.method == 'PUT':
         response = service.update(request, space_id, request.body)
         return JsonResponse(response[1], status=response[0])

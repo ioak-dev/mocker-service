@@ -29,4 +29,5 @@ urlpatterns = [
     path('project/<str:space_id>/', include('app.project.urls')),
     path('role/<str:space_id>/', include('app.role.urls')),
     path('endpoint/domain/<str:space_id>/', include('app.endpointDomain.urls')),
+    path('endpoint/domain/field/<str:space_id>/', include('app.endpointDomainField.urls')),
 ]
