@@ -40,8 +40,8 @@ def find_by_id(request, space_id, id):
 
 
 def find_by_project_id(request, space_id, project_id):
-    data = db_utils.find(space_id, domain, {'project_id': project_id})
-    field_data = field_service.find_fields_by_domainId(data['id'])
+    data = db_utils.find(space_id, domain, {'projectId': project_id})
+    field_data = field_service.find_fields_by_domainId(space_id, data['id'])
     data['fields'] = field_data
     return 200, {'data': data}
 

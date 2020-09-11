@@ -3,9 +3,14 @@ import library.db_utils as db_utils
 domain = 'endpoint.domain.field'
 
 
-def find_fields_by_domainId(request, space_id, domainId):
+def find_fields_domainId(request, space_id, domainId):
     data = db_utils.find(space_id, domain, {'domainId': domainId})
     return (200, {'data': data})
+
+
+def find_fields_by_domainId(space_id, domainId):
+    data = db_utils.find(space_id, domain, {'domainId': domainId})
+    return data
 
 
 def find(request, space_id):
