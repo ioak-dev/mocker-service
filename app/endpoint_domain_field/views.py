@@ -1,7 +1,7 @@
 from django.http import HttpResponse, JsonResponse
 from rest_framework.decorators import api_view
 from django.core import serializers
-import app.endpointDomainField.service as service
+import app.endpoint_domain_field.service as service
 import library.db_utils as db_utils
 
 

@@ -1,6 +1,6 @@
 import library.db_utils as db_utils
 import app.project.service as project_service
-import app.endpointDomainField.service as field_service
+import app.endpoint_domain_field.service as field_service
 
 domain = 'endpoint.domain'
 
@@ -11,7 +11,7 @@ def find(request, space_id):
 
 
 def find_by_project_id(request, space_id, project_id):
-    data = db_utils.find(space_id, domain, {'projectId': project_id})
+    data = db_utils.find(space_id, domain, {'project_id': project_id})
     domain_list = []
     for item in data:
         item['fields'] = field_service.find_fields_by_domainId(space_id, item['_id'])
@@ -21,15 +21,15 @@ def find_by_project_id(request, space_id, project_id):
 
 def update(request, space_id, data):
     if '_id' not in data:
-        if 'projectId' not in data:
+        if 'project_id' not in data:
             return 406, {'data': 'Please provide Project ID'}  # send error message
         else:
-            result_project = project_service.find_by_id(request, space_id, data['projectId'])
+            result_project = project_service.find_by_id(request, space_id, data['project_id'])
             if result_project is None:
                 return 406, {'data': 'Please provide a valid project ID'}  # send error message
             else:
                 updated_record = db_utils.upsert(space_id, domain, {
-                    'projectId': data['projectId'],
+                    'project_id': data['project_id'],
                     'name': data['name']
                 }, request.user_id)
                 updated_record['fields'] = field_service.update(space_id, data['fields'], updated_record['_id'],

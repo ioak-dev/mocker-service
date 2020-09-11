@@ -1,13 +1,13 @@
 from django.http import HttpResponse, JsonResponse
 from rest_framework.decorators import api_view
 
-from app.endpointDomain import service
+from app.endpoint_domain import service
 
 
 @api_view(['GET'])
-def get_endpoint_domain(request, space_id, projectId):
+def get_endpoint_domain(request, space_id, project_id):
     if request.method == 'GET':
-        response = service.find_by_project_id(request, space_id, projectId)
+        response = service.find_by_project_id(request, space_id, project_id)
         return JsonResponse(response[1], status=response[0])
 
 
