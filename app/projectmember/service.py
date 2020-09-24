@@ -6,14 +6,21 @@ from bson.objectid import ObjectId
 
 domain = 'project.member'
 
+
 def find(request, space_id, project_id):
     data = db_utils.find(space_id, domain, {'projectId': project_id})
     return (200, {'data': data})
+
 
 def add(request, space_id, data):
     updated_record = db_utils.upsert(space_id, domain, data, request.user_id)
     return (200, {'data': updated_record})
 
+
 def delete(request, space_id, id):
     result = db_utils.delete(space_id, domain, {'_id': id}, request.user_id)
     return (200, {'deleted_count': result.deleted_count})
+
+
+def find_by_projectid(request, space_id, project_id):
+    return db_utils.find(space_id, domain, {'projectId': project_id})

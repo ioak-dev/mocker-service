@@ -2,9 +2,11 @@ import os, datetime, time
 import library.db_utils as db_utils
 import app.sequence.service as sequence_service
 import app.role.service as role_service
+import app.projectmember.service as projectmember_service
 from bson.objectid import ObjectId
 
 domain = 'project'
+
 
 def find(request, space_id):
     # member_projects = find_member_projects(space_id, request.user_id)
@@ -20,8 +22,9 @@ def find(request, space_id):
 
     # projects = db_utils.find(space_id, domain, {'_id': {'$in': projectid_list}})
     projects = db_utils.find(space_id, domain, {})
-    
-    return (200, {'data': projects})
+
+    return 200, {'data': projects}
+
 
 def update(request, space_id, data):
     new_record = False
@@ -33,18 +36,35 @@ def update(request, space_id, data):
         sequence_service.create_sequence(space_id, 'stageOrder', updated_record['_id'], 1)
         sequence_service.create_sequence(space_id, 'taskId', updated_record['_id'], 1)
         sequence_service.create_sequence(space_id, 'epicColor', updated_record['_id'], 1)
-        role_service.add(space_id, {'type': 'ProjectAdministrator', 'userId': request.user_id, 'domainId': updated_record['_id']}, request.user_id)
-    return (200, {'data': updated_record})
+        role_service.add(space_id,
+                         {'type': 'ProjectAdministrator', 'userId': request.user_id, 'domainId': updated_record['_id']},
+                         request.user_id)
+    return 200, {'data': updated_record}
+
 
 def delete(request, space_id, id):
-    result = db_utils.delete(space_id, domain, {'_id': id}, request.user_id)
-    return (200, {'deleted_count': result.deleted_count})
+    project_member_list = projectmember_service.find_by_projectid(request, space_id, id)
+    for item in project_member_list:
+        print(item)
+        if item['type'] == 'ADMINISTRATOR':
+            result = db_utils.delete(space_id, domain, {'_id': id}, request.user_id)
+            return 200, {'deleted_count': result.deleted_count}
+        else:
+            return 406, {'data': 'User is not a Member or administrator'}
 
 
 def find_by_id(request, space_id, id):
-    data = db_utils.find(space_id, domain, {'_id': id})
-    return (200, {'data': data})
+    project_member_list = projectmember_service.find_by_projectid(request, space_id, id)
+    for item in project_member_list:
+        print(item)
+        if item['type'] == 'MEMBER' or item['type'] == 'ADMINISTRATOR':
+            data = db_utils.find(space_id, domain, {'_id': id})
+            return 200, {'data': data}
+        else:
+            return 406, {'data': 'User is not a Member or administrator'}
 
-# TBD deprecated should be removed
+        # TBD deprecated should be removed
+
+
 def find_all_projects(space_id):
     return db_utils.find(space_id, domain, {})
