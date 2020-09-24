@@ -43,7 +43,7 @@ def update(request, space_id, data):
 
 
 def delete(request, space_id, id):
-    project_member_list = projectmember_service.find_by_projectid(request, space_id, id)
+    project_member_list = projectmember_service.find_by_projectid_userid(request, space_id, id, request.user_id)
     for item in project_member_list:
         print(item)
         if item['type'] == 'ADMINISTRATOR':
@@ -54,7 +54,7 @@ def delete(request, space_id, id):
 
 
 def find_by_id(request, space_id, id):
-    project_member_list = projectmember_service.find_by_projectid(request, space_id, id)
+    project_member_list = projectmember_service.find_by_projectid_userid(request, space_id, id, request.user_id)
     for item in project_member_list:
         print(item)
         if item['type'] == 'MEMBER' or item['type'] == 'ADMINISTRATOR':

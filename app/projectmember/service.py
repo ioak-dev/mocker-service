@@ -22,5 +22,5 @@ def delete(request, space_id, id):
     return (200, {'deleted_count': result.deleted_count})
 
 
-def find_by_projectid(request, space_id, project_id):
-    return db_utils.find(space_id, domain, {'projectId': project_id})
+def find_by_projectid_userid(request, space_id, project_id, user_id):
+    return db_utils.find(space_id, domain, {'projectId': project_id, 'userId': user_id})
