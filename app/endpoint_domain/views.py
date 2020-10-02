@@ -11,8 +11,11 @@ def get_endpoint_domain(request, space_id, project_id):
         return JsonResponse(response[1], status=response[0])
 
 
-@api_view(['PUT'])
+@api_view(['GET', 'PUT'])
 def update_endpoint_domain(request, space_id):
+    if request.method == 'GET':
+        response = service.find(request, space_id)
+        return JsonResponse(response[1], status=response[0])
     if request.method == 'PUT':
         response = service.update(request, space_id, request.body)
         return JsonResponse(response[1], status=response[0])
