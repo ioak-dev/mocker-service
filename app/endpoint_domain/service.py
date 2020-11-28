@@ -8,7 +8,6 @@ def find(request, space_id):
     domains = db_utils.find(space_id, domain, {})
     return 200, {'data': domains}
 
-
 def find_by_project_id(request, space_id, project_id):
     data = db_utils.find(space_id, domain, {'project_id': project_id})
     return 200, {'data': data}
@@ -32,3 +31,10 @@ def find_by_id(request, space_id, id):
 # TBD deprecated should be removed
 def find_all_domains(space_id):
     return db_utils.find(space_id, domain, {})
+
+def get_by_project_and_domain(space_id, project_id, domain_name):
+    data = db_utils.find(space_id, domain, {"projectId": project_id, "name": domain_name})
+    if len(data) == 1:
+        return data[0]
+    else:
+        return None

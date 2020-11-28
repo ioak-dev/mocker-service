@@ -68,3 +68,11 @@ def find_by_id(request, space_id, id):
 
 def find_all_projects(space_id):
     return db_utils.find(space_id, domain, {})
+
+
+def get_by_reference(space_id, project_reference):
+    data = db_utils.find(space_id, domain, {"reference": project_reference})
+    if len(data) == 1:
+        return data[0]
+    else:
+        return None
