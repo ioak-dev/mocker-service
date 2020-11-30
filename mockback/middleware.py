@@ -9,9 +9,8 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
         if JWTAuthenticationMiddleware.is_json(request.body):
             request._body = json.loads(request.body)
 
-        if (request.method == 'OPTIONS') | request.path.startswith('/auth') | request.path.startswith('/api') | request.path.startswith('/space/create') | request.path.startswith('/space/banner'):
+        if (request.method == 'OPTIONS') | request.path.startswith('/auth') | request.path.startswith('/api') | request.path.startswith('/space/create') | request.path.startswith('/favicon.ico'):
             return
-
         try:
             claim = jwt.decode(request.headers.get('authorization'), 'jwtsecret', algorithms=['HS256'])
             request.claim = claim
