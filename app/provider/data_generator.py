@@ -31,29 +31,33 @@ sentence_list = [
 ]
 sentence_list_length = len(sentence_list) - 1
 
-
-def traverse_with_known_primary_key(structure, parent_reference, index, keyField, keyValue):
+def traverse(structure, parent_reference, index):
     generated_data = {}
     for row in structure:
         if row["parentReference"] == parent_reference:
             if row['datatype'] == 'object':
                 if row['array'] == True:
-                    generated_data[row['name']] = [traverse_with_known_primary_key(structure, row['reference'], i, keyField, keyValue) for i in range(1, 5)]
+                    generated_data[row['name']] = [traverse(structure, row['reference'], i) for i in range(1, 5)]
                 else:
-                    generated_data[row['name']] = traverse_with_known_primary_key(structure, row['reference'], index + 1, keyField, keyValue)
+                    generated_data[row['name']] = traverse(structure, row['reference'], index + 1)
             else:
                 if row['array'] == True:
-                    generated_data[row['name']] = [datagen(row['datatype'], row['lower'], row['upper'], i) for i in range(1, 5)]
-                elif row['reference'] == keyField:
-                    generated_data[row['name']] = keyValue
+                    generated_data[row['name']] = [datagen(row, i) for i in range(1, 5)]
                 else:
-                    generated_data[row['name']] = datagen(row['datatype'], row['lower'], row['upper'], index - 1)
+                    generated_data[row['name']] = datagen(row, index - 1)
     return generated_data
 
-def traverse(structure, parent_reference, index):
-    return traverse_with_known_primary_key(structure, parent_reference, index, None, None)
+def datagen(dataspec, index):
+    try:
+        datatype = dataspec['datatype']
+        upper = dataspec['upper']
+        lower = dataspec['lower']
+        start_sequence_from = dataspec['startSequenceFrom']
+        enum_values = dataspec['enumValues']
+        delimiter = dataspec['delimiter']
+    except:
+        pass
 
-def datagen(datatype, lower, upper, index):
     if datatype == 'word':
         return " ".join([word_list[random.randint(0, word_list_length)] for i in range(0, random.randint(lower, upper))])
     elif datatype == 'sentence':
@@ -67,12 +71,11 @@ def datagen(datatype, lower, upper, index):
     elif datatype == 'alphanumeric':
         return "".join([alphanum_list[random.randint(0, alphanum_list_length)] for i in range(0, random.randint(lower, upper))])
     elif datatype == 'sequence_number':
-        return lower + index
+        return start_sequence_from + index
     elif datatype == 'boolean':
         return bool(random.getrandbits(1))
     elif datatype == 'enum':
-        return ''
+        possibleValues = enum_values.split(delimiter)
+        return possibleValues[random.randint(0, len(possibleValues) - 1)]
     else:
         return "unsupported data type"
-
-
