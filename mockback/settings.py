@@ -27,8 +27,9 @@ SECRET_KEY = 'o-44az=l6$z4r5)8-u0le9tek*1e#wp=(m)o!r--+$y81x*!1+'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'mockback-service.herokuapp.com',
-    'localhost'
+    'localhost',
+    '127.0.0.1',
+    '*'
 ]
 
 # Application definition

@@ -7,9 +7,11 @@ import app.user.service as user_service
 import app.sequence.service as sequence_service
 
 DATABASE_URI = os.environ.get('DATABASE_URI')
-ONEAUTH_API = os.environ.get('ONEAUTH_API')
-if ONEAUTH_API is None:
-    ONEAUTH_API = 'http://127.0.0.1:8020/auth/'
+ONEAUTH_API_URL = os.environ.get('ONEAUTH_API_URL')
+if ONEAUTH_API_URL is None:
+    ONEAUTH_API_URL = 'http://127.0.0.1:8020'
+
+ONEAUTH_API_URL = ONEAUTH_API_URL + '/auth/'
 
 self_space_id = 'mockback'
 domain="user"
@@ -62,7 +64,7 @@ def do_signin_via_jwt(space_id, data):
 
 def get_session(space_id, auth_key):
     start_time = int(round(time.time() * 1000))
-    response = requests.get(ONEAUTH_API + 'space/' + space_id + '/session/' + auth_key)
+    response = requests.get(ONEAUTH_API_URL + 'space/' + space_id + '/session/' + auth_key)
     if response.status_code != 200:
         print(response)
         return (response.status_code, response.json())
