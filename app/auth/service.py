@@ -13,7 +13,7 @@ if ONEAUTH_API_URL is None:
 
 ONEAUTH_API_URL = ONEAUTH_API_URL + '/auth/'
 
-self_space_id = 'mockback'
+self_space_id = 'mocker'
 domain="user"
 
 def do_jwttest(space_id):

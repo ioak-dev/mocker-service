@@ -1,10 +1,10 @@
 from celery import Celery
 import os
-import mockback.settings as settings
+import mocker.settings as settings
 
 # Setting the Default Django settings module
-os.environ.setdefault('DJANGO_SETTINGS_MODULE','mockback.settings')
-app=Celery('mockback')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE','mocker.settings')
+app=Celery('mocker')
 
 # Using a String here means the worker will always find the configuration information
 app.config_from_object('django.conf:settings')

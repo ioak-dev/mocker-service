@@ -87,4 +87,4 @@ def declean_array(data):
 
 
 def get_dbname(space_id):
-    return 'mockback_' + space_id
+    return 'mocker_' + space_id

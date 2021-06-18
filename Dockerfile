@@ -43,4 +43,4 @@ RUN python -m pip install -r requirements.txt
 WORKDIR /app
 COPY . /app
 
-CMD gunicorn mockback.wsgi:application --bind 0.0.0.0:$PORT
+CMD gunicorn mocker.wsgi:application --bind 0.0.0.0:$PORT

@@ -9,10 +9,8 @@ def find(request, space_id):
 
 def update(request, space_id, data):
     authorized = False
-    if data['type'] == 'ProjectAdministrator':
+    if data['type'] == 'ProjectAdministrator' or data['type'] == 'ProjectMember':
         authorized = is_project_admin(space_id, request.user_id, data['domainId'])
-    elif data['type'] == 'TeamAdministrator':
-        authorized = is_team_admin(space_id, request.user_id, data['domainId'])
     
     if authorized:
         updated_record = add(space_id, data, request.user_id)
@@ -23,7 +21,18 @@ def update(request, space_id, data):
 def add(space_id, data, user_id):
     return db_utils.upsert(space_id, domain, data, user_id)
 
-def delete(request, space_id, id):
+def delete(request, space_id, data):
+    authorized = False
+    if data['type'] == 'ProjectAdministrator' or data['type'] == 'ProjectMember':
+        authorized = is_project_admin(space_id, request.user_id, data['domainId'])
+    
+    if authorized:
+        result = db_utils.delete(space_id, domain, {'type': data['type'], 'userId': data['userId'], 'domainId': data['domainId']}, request.user_id)
+        return (200, {'deleted_count': result.deleted_count})
+    else:
+        return (401, {'data': 'unauthorized'})
+
+def delete_by_id(request, space_id, id):
     existing_record = db_utils.find(space_id, domain, {'_id': id})
     if len(existing_record) > 0:
         authorized = False
