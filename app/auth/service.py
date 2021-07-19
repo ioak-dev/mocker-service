@@ -66,7 +66,6 @@ def get_session(space_id, auth_key):
     start_time = int(round(time.time() * 1000))
     response = requests.get(ONEAUTH_API_URL + 'space/' + space_id + '/session/' + auth_key)
     if response.status_code != 200:
-        print(response)
         return (response.status_code, response.json())
     oa_response = jwt_utils.decode(response.json()['token'])
     existing_user_data = user_service.find_by_user_id(space_id, oa_response['userId'])
