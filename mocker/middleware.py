@@ -9,14 +9,16 @@ class JWTAuthenticationMiddleware(MiddlewareMixin):
         if JWTAuthenticationMiddleware.is_json(request.body):
             request._body = json.loads(request.body)
 
-        if (request.method == 'OPTIONS') | request.path.startswith('/auth') | request.path.startswith('/api') | request.path.startswith('/space/create') | request.path.startswith('/favicon.ico'):
+        if (request.method == 'OPTIONS') | request.path.startswith('/auth') | request.path.startswith('/api') | request.path.startswith('/space/create') | request.path.endswith('/authorize_user') | request.path.startswith('/favicon.ico'):
             return
-        try:
-            claim = jwt.decode(request.headers.get('authorization'), 'jwtsecret', algorithms=['HS256'])
-            request.claim = claim
-            request.user_id = claim.get('userId')
-        except jwt.exceptions.DecodeError:
-            raise PermissionDenied
+
+        with open("public.pem") as key_file:
+            try:
+                claim = jwt.decode(request.headers.get('authorization'), key=key_file.read(), algorithms=['RS256'])
+                request.claim = claim
+                request.user_id = claim.get('user_id')
+            except jwt.exceptions.DecodeError:
+                raise PermissionDenied
         
         return
 

@@ -12,6 +12,11 @@ def do(request, space_id):
         response = service.do_update_user(request, space_id)
         return JsonResponse(response[1], status=response[0])
 
+@api_view(['POST'])
+def authorize_user(request, space_id):
+    response = service.authorize_user(request, space_id)
+    return JsonResponse(response[1], status=response[0])
+
 @api_view(['GET'])
 def get_all(request, space_id):
     if request.method == 'GET':
